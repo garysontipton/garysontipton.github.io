@@ -1,152 +1,159 @@
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="./jQueryRotate.js"></script>
-    <style>
-      .letitrip {
-        max-width: 20%;
-        width: 20%;
-        height: 15%;
-        position: absolute;
-      }
-      .dragon {
-        background-image: url("./dragonBeyblade.jfif");
-        height: 50px;
-        width: 50px;
-        top: 0px;
-      }
-      .pegasus {
-        background-image: url("./pegasusBeyblade.jfif");
-        height: 50px;
-        width: 50px;
-        top: 150px;
-        left: 150px;
-      }
-      .genericBeyblade {
-        background-image: url("./genericBeyblade.jfif");
-        height: 50px;
-        width: 50px;
-        top: 300px;
-        left: 300px;
-      }
+<html lang="en">
+<head>
+<script src="./jquery.min.js"></script>
+<script src="./jQueryRotate.js"></script>
+<style>
+.myBtn {
+  position: absolute;
+}
+.dragon {
+  background-image: url("dragonBeyblade.jfif");
+  height: 100px;
+  width: 100px;
+  top: 0px;
+}
+.pegasus {
+  background-image: url("pegasusBeyblade.jfif");
+  height: 100px;
+  width: 100px;
+  top: 150px;
+  left: 150px;
+}
+.genericBeyblade {
+  background-image: url("genericBeyblade.jfif");
+  height: 100px;
+  width: 100px;
+  top: 300px;
+  left: 300px;
+}
 
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        color: lime;
-        background-color: azure;
-        font-family: Bold;
-      }
-
-      .spinner {
-        max-width: 10%;
-        width: 10%;
-        height: auto;
-        position: absolute;
-        top: 100px;
-        left: 475px;
-      }
-
-      .speed-plane {
-        position: absolute;
-        bottom: 0;
-        text-align: center;
-        top: 475px;
-        left: 550px;
-      }
-
-      h1,
-      h2,
-      .speed-plane {
-        width: 10%;
-      }
-
-      h1 {
-        z-index: 999;
-        font-size: 40px;
-        margin: 0;
-        text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
-      }
-
-    </style>
-  </head>
-  <body>
-    <button id="letitrip" class="letitrip">Let It Rip</button>
-
-    <img Id="pegasusspinner" class="spinner" src="pegasusBeyblade.jfif" />
-
-    <script>
-
-      function movespinner(aobj, cntr) {
-        var newTop = Math.floor(Math.random() * 350);
-        var newLeft = Math.floor(Math.random() * 1024);
-        var newDuration = Math.floor(Math.random() * 5000);
-
-        if (cntr >= 500) {
-          newDuration = 0;
-          console.log(
-            "Setting newDuration to zero so that the effect will stop"
-          );
+html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            color: lime;
+            font-family: Bold;
         }
 
-        $(aobj).animate(
-          {
-            deg: 360 * 40,
-            top: newTop,
-            left: newLeft
-          },
-          newDuration,
-          function() {
-            movespinner(aobj, cntr);
-          }
-        );
-      }
+        .spinner {
+            max-width: 160px;
+            width: 160px;
+            height: auto;
+            position: absolute;
+            top: 100px;
+            left: 475px;
+        }
 
-      function stopSpinner(aobj) {
-        aobj.stop( true, true ).fadeOut();
-      }
+        .speed-plane {
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            top: 475px;
+            left: 550px;
+        }
+         
 
-      $.fn.animateRotate = function(angle, duration, easing, complete) {
-        var args = $.speed(duration, easing, complete);
-        var step = args.step;
-        return this.each(function(i, e) {
-          args.step = function(now) {
-            $.style(e, "transform", "rotate(" + now + "deg)");
-            if (step) return step.apply(this, arguments);
-          };
+        h1, h2, .speed-plane {
+            width: 10%;
+        }
 
-          $({ deg: 0 }).animate({ deg: angle }, args);
-          spinme($("#pegasusspinner"));
-        });
-      };
+        h1 {
+            z-index: 999;
+            font-size: 40px;
+            margin: 0;
+            text-shadow: -3px 0 white, 0 3px white, 3px 0 white, 0 -3px white;
+        }
 
-      var rotation = function() {
-        $("#pegasusspinner").rotate({
-          angle: 0,
-          animateTo: 360,
-          callback: rotation,
-          easing: function(x, t, b, c, d) {
-            // t: current time, b: begInnIng value, c: change In value, d: duration
-            return c * (t / d) + b;
-          }
-        });
-        setTimeout(function() {
+</style>
+</head>
+<body>
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 150px; float: left; white-space: nowrap;"> <h2>Counter:</h2> </div>
+        <div style="width: 40px; margin-left: 160px; white-space: nowrap;"> <h2 id="counter">0</h2> </div>
+        <div style="margin-left: 250px; white-space: nowrap;"> <button id="button">Test</button> </div>
+    </div>
+</div>
+
+<img Id="pegasusspinner" class="spinner" src="pegasusBeyblade.jfif" ondblclick="Javascript:spinme(this)">
+
+
+<script>
+
+// #Global Var
+var newDuration = Math.floor(Math.random()*5000);
+var globalCounter = 0;
+
+function myFunction(myid) {
+  document.getElementById(myid).style.left = "500px";
+}
+function mydblclickfunction(myid) {
+  document.getElementById(myid).style.left = "10px";
+}
+function mytrpclickfunction(myid) {
+  document.getElementById(myid).rotate.right = "10px";
+}
+
+function spinme(aobj) {
+  rotation();
+  movespinner(aobj, 0);
+}
+
+function movespinner(aobj, cntr) {
+
+  var newTop = Math.floor(Math.random()*350);
+  var newLeft = Math.floor(Math.random()*1024);
+  var currentDuration = newDuration;
+  newDuration = (currentDuration - 10);
+  cntr++;
+  $("#counter").html(cntr);
+
+  // setTimeout(function(){
+  //   // $("#pegasusspinner").stopRotate();
+  //   cntr = 29;
+  //   newDuration = 0;
+  //   }, 15000); 
+
+    if (cntr < 30) {
+    $(aobj).animate({
+      deg: 360 * 40,
+      top: newTop,
+      left: newLeft,
+      }, newDuration, function() {
+
+        if (cntr >= 30) {
           $("#pegasusspinner").stopRotate();
-          stopSpinner($("#pegasusspinner"));
-        }, 15000);
-      };
-
-      $(function() {
-        $("#letitrip").click(function() {
-          rotation();
-          movespinner($("#pegasusspinner"), 0);
-        });
+          newDuration = 0;    
+          console.log("Setting newDuration to zero so that the effect will stop");
+        } else {
+          // Keep spinning
+          movespinner(aobj, cntr);     
+        }
       });
-    </script>
-  </body>
-</html>
+    } else {
+      $("#pegasusspinner").stopRotate();
+    }
+}
+
+$(function(){
+    $("#button").click(function(){
+      spinme($("#pegasusspinner"));
+    });   
+});
+
+var rotation = function (){
+  $("#pegasusspinner").rotate({
+
+        angle:0,
+        animateTo:360,
+        callback: rotation,
+        easing: function (x,t,b,c,d){
+        // t: current time, b: begInnIng value, c: change In value, d: duration
+        return c*(t/d)+b;
+      }
+  }); 
+}
+</script>
+
+</body>
+</html> 
